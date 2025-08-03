@@ -1,0 +1,18 @@
+def segment_signal(data, segment_length=2048):
+    """segment data into fixed length"""
+    segments = []
+    for i in range(0, len(data) - segment_length + 1, segment_length):
+        segments.append(data[i:i+segment_length])
+    return np.array(segments)
+
+def apply_filter(data, low_cutoff=0.1, high_cutoff=30, fs=1000):
+    """filtering"""
+    sos = signal.butter(4, [low_cutoff, high_cutoff], btype='band', fs=fs, output='sos')
+    filtered = signal.sosfilt(sos, data)
+    return filtered
+
+def preprocess_dataset(raw_data, segment_length=512):
+    """whole process"""
+    filtered = apply_filter(raw_data)
+    segmented = segment_signal(filtered, segment_length)
+    return segmented
