@@ -2,6 +2,7 @@
 
 import torch.nn as nn
 import torch.optim as optim
+from dcjan_model import DCJDAN
 
 def train_dcjdan():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
