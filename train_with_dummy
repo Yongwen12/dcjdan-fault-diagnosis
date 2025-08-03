@@ -1,1 +1,37 @@
+# Define Train
 
+import torch.nn as nn
+import torch.optim as optim
+
+def train_dcjdan():
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model = DCJDAN(num_classes=3).to(device)
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    ce_loss = nn.CrossEntropyLoss()
+
+    source_loader = DataLoader(create_dummy_dataset(3000, 3), batch_size=64, shuffle=True)
+    target_loader = DataLoader(create_dummy_dataset(1500, 3), batch_size=64, shuffle=True)
+
+    for epoch in range(5):
+        model.train()
+        for (x_s, y_s), (x_t, _) in zip(source_loader, target_loader):
+            x_s, y_s = x_s.to(device), y_s.to(device)
+            x_t = x_t.to(device)
+
+            y_s_pred, y_t_pred, f_s, f_t = model(x_s, x_t)
+            pseudo_labels_t = torch.argmax(y_t_pred.detach(), dim=1)
+
+            loss_cls = ce_loss(y_s_pred, y_s)
+            loss_mmd = mmd_loss(f_s, f_t, y_s, pseudo_labels_t)
+            loss_reg = l2_reg_loss(model.source_net, model.target_net)
+
+            loss = loss_cls + 0.6 * loss_mmd + 0.001 * loss_reg
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        print(f"Epoch {epoch+1}, Loss: {loss.item():.4f}")
+
+# Train
+train_dcjdan()
