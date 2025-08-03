@@ -8,14 +8,17 @@ from utils import create_dummy_dataset, l2_reg_loss, mmd_loss
 
 ### Define train
 
-def train_dcjdan():
+def train_dcjdan(source_data=None, target_data=None):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = DCJDAN(num_classes=3).to(device)
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     ce_loss = nn.CrossEntropyLoss()
 
-    source_loader = DataLoader(create_dummy_dataset(3000, 3), batch_size=64, shuffle=True)
-    target_loader = DataLoader(create_dummy_dataset(1500, 3), batch_size=64, shuffle=True)
+    if source_data is None:
+        source_loader = DataLoader(create_dummy_dataset(3000, 3), batch_size=64, shuffle=True)
+
+    if target_data is None:
+        target_loader = DataLoader(create_dummy_dataset(1500, 3), batch_size=64, shuffle=True)
 
     for epoch in range(5):
         model.train()
