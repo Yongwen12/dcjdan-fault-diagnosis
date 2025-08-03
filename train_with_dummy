@@ -6,17 +6,6 @@ from DCJDAN_model import DCJDAN
 from torch.utils.data import TensorDataset, DataLoader
 
 
-### Define loss
-
-def create_dummy_dataset(n_samples, n_classes):
-    X = torch.randn(n_samples, 1, 1024)
-    y = torch.randint(0, n_classes, (n_samples,))
-    return TensorDataset(X, y)
-
-
-def l2_reg_loss(net1, net2):
-    return sum(torch.norm(p1 - p2, p=2) for p1, p2 in zip(net1.parameters(), net2.parameters()))
-
 ### Define train
 
 def train_dcjdan():
