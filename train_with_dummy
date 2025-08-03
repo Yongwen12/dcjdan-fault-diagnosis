@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from DCJDAN_model import DCJDAN
 from torch.utils.data import TensorDataset, DataLoader
-
+from utils import create_dummy_dataset, l2_reg_loss, mmd_loss
 
 ### Define train
 
