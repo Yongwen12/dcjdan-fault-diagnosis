@@ -1,0 +1,19 @@
+import yaml
+
+def load_config(path='config.yaml', **overrides):
+    """Load YAML config and override values dynamically."""
+    with open(path) as f:
+        config = yaml.safe_load(f)
+    
+    for key, value in overrides.items():
+        section, param = key.split('.')
+        if section in config and param in config[section]:
+            config[section][param] = value
+
+    return config
+
+# Example usage:
+config = load_config('config.yaml', **{
+    'training.learning_rate': 0.0005,
+    'training.epochs': 20
+})
