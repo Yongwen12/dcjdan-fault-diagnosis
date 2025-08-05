@@ -3,23 +3,23 @@ import torch
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 from train import train_dcjdan
-from utils import load_uploaded_csv_as_tensor_dataset  # 需要自己实现
+from utils import load_uploaded_csv_as_tensor_dataset  # You need to implement this
 
 st.title("Interactive DCJDAN Training Panel")
 
 # =============================
-# 数据集选择
+# Dataset selection
 # =============================
 source_file = st.file_uploader("Upload Source Dataset (CSV)", type=["csv"])
 target_file = st.file_uploader("Upload Target Dataset (CSV)", type=["csv"])
 
 # =============================
-# 模型选择
+# Model selection
 # =============================
 model_name = st.selectbox("Select Model", ["DCJDAN"])
 
 # =============================
-# 超参数
+# Hyperparameters
 # =============================
 use_defaults = st.checkbox("Use Default Training Parameters", value=True)
 
@@ -35,13 +35,15 @@ else:
     batch_size = st.slider("Batch Size", min_value=8, max_value=256, value=64)
 
 # =============================
-# 训练按钮
+# Training button
 # =============================
 if st.button("Start Training"):
     with st.spinner("Training in progress..."):
+        # Load uploaded datasets or fallback to default
         source_data = load_uploaded_csv_as_tensor_dataset(source_file) if source_file else None
         target_data = load_uploaded_csv_as_tensor_dataset(target_file) if target_file else None
 
+        # Train model
         loss_values, features_per_epoch = train_dcjdan(
             epochs=epochs,
             lr=learning_rate,
@@ -51,7 +53,7 @@ if st.button("Start Training"):
         )
 
     # =============================
-    # Loss 可视化
+    # Loss visualization
     # =============================
     plt.figure()
     plt.plot(range(1, len(loss_values) + 1), loss_values, marker='o')
@@ -61,7 +63,7 @@ if st.button("Start Training"):
     st.pyplot(plt)
 
     # =============================
-    # t-SNE 可视化
+    # t-SNE visualization
     # =============================
     for epoch, (f_s, f_t) in enumerate(features_per_epoch):
         if epoch % 5 == 0:
