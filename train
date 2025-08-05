@@ -4,33 +4,33 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from models.dcjdan_model import DCJDAN
 from utils import create_dummy_dataset, l2_reg_loss, mmd_loss
-from load_config import load_config
 
-# Load config
-config = load_config('config.yaml')
+def train_dcjdan(epochs=None, lr=None, batch_size=None, source_data=None, target_data=None):
+    # Default values
+    epochs = epochs or 10
+    lr = lr or 0.001
+    batch_size = batch_size or 64
 
-def train_dcjdan(source_data=None, target_data=None):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = DCJDAN(num_classes=config['model']['num_classes']).to(device)
-
-    optimizer = optim.Adam(model.parameters(), lr=config['training']['learning_rate'])
+    model = DCJDAN(num_classes=3).to(device)
+    optimizer = optim.Adam(model.parameters(), lr=lr)
     ce_loss = nn.CrossEntropyLoss()
 
-    # Prepare data loaders
     source_loader = DataLoader(
-        source_data if source_data else create_dummy_dataset(3000, config['model']['num_classes']),
-        batch_size=config['training']['batch_size'],
-        shuffle=True
+        source_data if source_data else create_dummy_dataset(3000, 3),
+        batch_size=batch_size, shuffle=True
     )
-
     target_loader = DataLoader(
-        target_data if target_data else create_dummy_dataset(1500, config['model']['num_classes']),
-        batch_size=config['training']['batch_size'],
-        shuffle=True
+        target_data if target_data else create_dummy_dataset(1500, 3),
+        batch_size=batch_size, shuffle=True
     )
 
-    for epoch in range(config['training']['epochs']):
+    loss_values = []
+    features_per_epoch = []
+
+    for epoch in range(epochs):
         model.train()
+        epoch_loss = 0
         for (x_s, y_s), (x_t, _) in zip(source_loader, target_loader):
             x_s, y_s = x_s.to(device), y_s.to(device)
             x_t = x_t.to(device)
@@ -42,13 +42,18 @@ def train_dcjdan(source_data=None, target_data=None):
             loss_mmd = mmd_loss(f_s, f_t, y_s, pseudo_labels_t)
             loss_reg = l2_reg_loss(model.source_net, model.target_net)
 
-            loss = loss_cls + config['training']['mmd_weight'] * loss_mmd + config['training']['reg_weight'] * loss_reg
+            loss = loss_cls + 0.6 * loss_mmd + 0.001 * loss_reg
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-        print(f"Epoch {epoch+1}/{config['training']['epochs']}, Loss: {loss.item():.4f}")
+            epoch_loss += loss.item()
 
-if __name__ == "__main__":
-    train_dcjdan()
+        avg_loss = epoch_loss / len(source_loader)
+        loss_values.append(avg_loss)
+
+        # Collect features for t-SNE visualization
+        features_per_epoch.append((f_s.detach().cpu(), f_t.detach().cpu()))
+
+    return loss_values, features_per_epoch
