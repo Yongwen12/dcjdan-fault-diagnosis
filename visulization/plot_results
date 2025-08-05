@@ -1,0 +1,33 @@
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+
+def plot_training_loss(loss_values):
+    """Plot the training loss over epochs."""
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(1, len(loss_values)+1), loss_values, marker='o')
+    plt.title('Training Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.grid(True)
+    plt.show()
+
+def plot_feature_distribution(features, labels):
+    """Visualize feature distributions (e.g., t-SNE)."""
+    reduced = TSNE(n_components=2).fit_transform(features)
+    plt.figure(figsize=(8, 5))
+    scatter = plt.scatter(reduced[:, 0], reduced[:, 1], c=labels, cmap='viridis', s=10)
+    plt.title('Feature Distribution')
+    plt.legend(*scatter.legend_elements(), title="Classes")
+    plt.show()
+
+def plot_source_target_distribution(source_features, target_features):
+    """Plot the distribution of source and target features after training."""
+    plt.figure(figsize=(8, 5))
+    plt.scatter(source_features[:, 0], source_features[:, 1], c='blue', label='Source', alpha=0.5, s=10)
+    plt.scatter(target_features[:, 0], target_features[:, 1], c='red', label='Target', alpha=0.5, s=10)
+    plt.title('Source vs Target Feature Distribution')
+    plt.xlabel('Feature 1')
+    plt.ylabel('Feature 2')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
