@@ -10,5 +10,6 @@ __all__ = [
     "apply_filter",
     "preprocess_dataset",
     "l2_reg_loss",
-    "mmd_loss"
+    "mmd_loss",
+    "plot_results"
 ]
