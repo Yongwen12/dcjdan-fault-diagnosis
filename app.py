@@ -14,6 +14,25 @@ source_file = st.file_uploader("Upload Source Dataset (CSV)", type=["csv"])
 target_file = st.file_uploader("Upload Target Dataset (CSV)", type=["csv"])
 
 # =============================
+# Use dummy data if no user data provided
+# =============================
+from utils import create_dummy_dataset
+# Handle uploaded or fallback to dummy
+if source_file is not None:
+    source_data = load_uploaded_csv_as_tensor_dataset(source_file)
+    st.success("✅ Source dataset loaded.")
+else:
+    source_data = create_dummy_dataset(3000, num_classes=3)
+    st.warning("⚠️ No source dataset uploaded. Using dummy source data.")
+
+if target_file is not None:
+    target_data = load_uploaded_csv_as_tensor_dataset(target_file)
+    st.success("✅ Target dataset loaded.")
+else:
+    target_data = create_dummy_dataset(1500, num_classes=3)
+    st.warning("⚠️ No target dataset uploaded. Using dummy target data.")
+    
+# =============================
 # Model selection
 # =============================
 model_name = st.selectbox("Select Model", ["DCJDAN"])
