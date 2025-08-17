@@ -1,3 +1,5 @@
+import torch
+
 def l2_reg_loss(net1, net2):
     return sum(torch.norm(p1 - p2, p=2) for p1, p2 in zip(net1.parameters(), net2.parameters()))
 
