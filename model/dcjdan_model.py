@@ -1,5 +1,3 @@
-# install requiremnents if not pre-installed
-!pip install torch scikit-learn matplotlib seaborn umap-learn
 
 # backbone
 import torch
