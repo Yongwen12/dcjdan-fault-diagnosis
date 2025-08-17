@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from models.dcjdan_model import DCJDAN
+from model.dcjdan_model import DCJDAN
 from utils import create_dummy_dataset, l2_reg_loss, mmd_loss
 
 def train_dcjdan(epochs=None, lr=None, batch_size=None, source_data=None, target_data=None):
