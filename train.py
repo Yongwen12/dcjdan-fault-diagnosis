@@ -28,7 +28,7 @@ def train_dcjdan(epochs=None, lr=None, batch_size=None, source_data=None, target
     else:
         target_data = load_uploaded_csv_as_tensor_dataset("data/default_target_dataset.csv.gz")
 
-target_loader = DataLoader(target_data, batch_size=batch_size, shuffle=True)
+    target_loader = DataLoader(target_data, batch_size=batch_size, shuffle=True)
 
     loss_values = []
     features_per_epoch = []
