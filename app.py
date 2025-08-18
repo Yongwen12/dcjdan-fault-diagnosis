@@ -2,7 +2,7 @@ import streamlit as st
 import torch
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
-from train import train_dcjdan
+from model.dcjdan_model import DCJDAN
 from utils import load_uploaded_csv_as_tensor_dataset, create_dummy_dataset, mmd_loss, l2_reg_loss
 import torch.nn as nn
 import torch.optim as optim
