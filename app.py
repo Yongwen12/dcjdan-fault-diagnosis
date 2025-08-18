@@ -35,8 +35,16 @@ if st.button("Start Training"):
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     ce_loss = nn.CrossEntropyLoss()
 
-    source_data = load_uploaded_csv_as_tensor_dataset(source_file) if source_file else create_dummy_dataset(3000, 3)
-    target_data = load_uploaded_csv_as_tensor_dataset(target_file) if target_file else create_dummy_dataset(1500, 3)
+    if source_file:
+        source_data = load_uploaded_csv_as_tensor_dataset(source_file)
+    else:
+        source_data = load_uploaded_csv_as_tensor_dataset("data/default_source_dataset.csv.gz")
+    
+    if target_file:
+        target_data = load_uploaded_csv_as_tensor_dataset(target_file)
+    else:
+        target_data = load_uploaded_csv_as_tensor_dataset("data/default_target_dataset.csv.gz")
+    
     source_loader = DataLoader(source_data, batch_size=batch_size, shuffle=True)
     target_loader = DataLoader(target_data, batch_size=batch_size, shuffle=True)
 
