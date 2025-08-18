@@ -31,7 +31,7 @@ class CNNBackbone(nn.Module):
         x = self.pool5(F.relu(self.conv5(x)))
         x = self.pool6(F.relu(self.conv6(x)))
 
-        self.fc1 = nn.Linear(x.shape[1], 200)
+        self.fc1 = nn.Linear(x.shape[0], 200)
         self.fc2 = nn.Linear(200, 100)
 
     def forward(self, x):
