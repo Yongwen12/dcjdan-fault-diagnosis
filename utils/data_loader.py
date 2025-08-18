@@ -24,7 +24,7 @@ def load_uploaded_csv_as_tensor_dataset(uploaded_file, label_column='label'):
     y = df[label_column].values.astype('int64')
 
     # Convert to tensors
-    X_tensor = torch.tensor(X)
+    X_tensor = torch.tensor(df.iloc[:, :-1].values, dtype=torch.float32).unsqueeze(1)
     y_tensor = torch.tensor(y)
 
     return TensorDataset(X_tensor, y_tensor)
