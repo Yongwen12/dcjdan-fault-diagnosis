@@ -30,9 +30,8 @@ class CNNBackbone(nn.Module):
         x = self.pool4(F.relu(self.conv4(x)))
         x = self.pool5(F.relu(self.conv5(x)))
         x = self.pool6(F.relu(self.conv6(x)))
-        flattened_size = x.size(1) * x.size(2)
 
-        self.fc1 = nn.Linear(flattened_size, 200)
+        self.fc1 = nn.Linear(x.shape[1], 200)
         self.fc2 = nn.Linear(200, 100)
 
     def forward(self, x):
