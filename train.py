@@ -16,14 +16,19 @@ def train_dcjdan(epochs=None, lr=None, batch_size=None, source_data=None, target
     optimizer = optim.Adam(model.parameters(), lr=lr)
     ce_loss = nn.CrossEntropyLoss()
 
-    source_loader = DataLoader(
-        source_data if source_data else create_dummy_dataset(3000, 3),
-        batch_size=batch_size, shuffle=True
-    )
-    target_loader = DataLoader(
-        target_data if target_data else create_dummy_dataset(1500, 3),
-        batch_size=batch_size, shuffle=True
-    )
+    if source_file:
+        source_data = load_uploaded_csv_as_tensor_dataset(source_file)
+    else:
+        source_data = load_uploaded_csv_as_tensor_dataset("data/default_source_dataset.csv.gz")
+
+    source_loader = DataLoader(source_data, batch_size=batch_size, shuffle=True)
+
+    if target_file:
+        target_data = load_uploaded_csv_as_tensor_dataset(target_file)
+    else:
+        target_data = load_uploaded_csv_as_tensor_dataset("data/default_target_dataset.csv.gz")
+
+target_loader = DataLoader(target_data, batch_size=batch_size, shuffle=True)
 
     loss_values = []
     features_per_epoch = []
