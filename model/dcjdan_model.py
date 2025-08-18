@@ -33,7 +33,7 @@ class CNNBackbone(nn.Module):
         
         x = self.flatten(x)
 
-        self.fc1 = nn.Linear(x.shape[1] * x.shape[2], 200)
+        self.fc1 = nn.Linear(x.shape[1], 200)
         self.fc2 = nn.Linear(200, 100)
 
     def forward(self, x):
