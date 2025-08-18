@@ -31,7 +31,7 @@ else:
 
 if st.button("Start Training"):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = train_dcjdan(num_classes=3).to(device)
+    model = train_dcjdan.to(device)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     ce_loss = nn.CrossEntropyLoss()
 
