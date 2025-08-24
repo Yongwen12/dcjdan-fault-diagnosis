@@ -1,7 +1,6 @@
 # dcjdan-fault-diagnosis
 
 Hi!
-
 This repository contains a PyTorch implementation of the **DCJDAN** model from our paper:
 
 **"Deep Coupled Joint Distribution Adaptation Network: A Method for Intelligent Fault Diagnosis Between Artificial and Real Damages"**  
@@ -9,8 +8,12 @@ This repository contains a PyTorch implementation of the **DCJDAN** model from o
 🔗 [Paper Link](https://doi.org/10.1109/TIM.2020.3043510)
 
 
-## Research question
+## Try it out with streamlit!
+Run the interactive demo on Streamlit to replicate results and experiment with parameters:
+👉 [Open the Streamlit App](https://dcjdan-fault-diagnosis-ncwovdqenbapa3sjvhdziz.streamlit.app/)
 
+
+## About the reseach
 In real-world industrial applications, fault diagnosis models are often trained on data from artificially induced damage, which significantly differs from naturally occurring faults. This domain gap limits model performance in deployment.
 This project proposes DCJDAN, a dual-stream deep adaptation network that aligns feature distributions and improves generalization from lab conditions to real conditions.
 
